@@ -1,73 +1,61 @@
-# React + TypeScript + Vite
+# Avito Internship Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## О проекте
 
-Currently, two official plugins are available:
+Веб-приложение для модерации объявлений, стажёрское тестовое задание Авито.  
+Используются React 19 + TypeScript + Vite, построено по методологии FSD с поддержкой SCSS и CSS-модулей.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Структура проекта (FSD)
 
-## React Compiler
+| Каталог   | Описание                                                   |
+|-----------|------------------------------------------------------------|
+| app/      | Точка входа, роутинг, провайдеры состояния                 |
+| pages/    | Страницы приложения (`ListPage`, `ItemPage`, `StatsPage`)  |
+| widgets/  | Мелкие UI-компоненты и элементы интерфейса                 |
+| features/ | Функциональные блоки с бизнес-логикой (фильтры, модерация) |
+| entities/ | Предметные объекты и их модели (объявления, пользователи)  |
+| shared/   | Общие стили, типы, утилиты, константы                      |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Основные технологии
 
-## Expanding the ESLint configuration
+- React 19 с хуками
+- TypeScript
+- Vite (с конфигурацией алиасов для удобных импортов)
+- SCSS + CSS Modules с БЭМ-стилизацией
+- ESLint + Prettier с Husky и lint-staged для автоформатирования и обеспечения качества кода
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Запуск проекта
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Открыть [http://localhost:5173](http://localhost:5173) в браузере.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Скрипты
+
+| Скрипт           | Описание                           |
+|------------------|------------------------------------|
+| `npm run dev`    | Запуск dev-сервера                 |
+| `npm run build`  | Сборка релиза                      |
+| `npm run lint`   | Запуск ESLint и автофиксация кода  |
+| `npm run format` | Форматирование кода через Prettier |
+
+## Настройка окружения
+
+- Алиасы импортов настроены в `tsconfig.json` и автоматически подхватываются Vite
+- ESLint настроен с flat config, поддержка React, TypeScript, React Refresh и Prettier
+- Husky с pre-commit хуками для запуска lint-staged — lint и prettier перед коммитом
+
+## Стиль коммитов
+| Тип коммита | Описание                            |
+|-------------|-------------------------------------|
+| feat        | Добавление новой функциональности   |
+| fix         | Исправление ошибок                  |
+| chore       | Вспомогательные задачи и обновления |
+
+---
+Создатель: Бренева Вероника 
+tg: @nikaginger
