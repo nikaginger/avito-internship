@@ -3,6 +3,9 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
+import pluginReact from "eslint-plugin-react";
+import pluginReactHooks from "eslint-plugin-react-hooks";
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
@@ -11,9 +14,24 @@ export default defineConfig([
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
-      tseslint.configs.recommended,
+        ...tseslint.configs.recommended,
+        pluginReact.configs.recommended,
+        pluginReactHooks.configs.recommended,
+        eslintPluginPrettier,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
+        {
+            rules: {
+                "prettier/prettier": "error",
+                "@typescript-eslint/consistent-type-imports": "error",
+                "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }]
+            }
+        },
+        {
+            settings: {
+                react: { version: "detect" }
+            }
+        }
     ],
     languageOptions: {
       ecmaVersion: 2020,
