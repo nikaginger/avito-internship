@@ -1,7 +1,13 @@
 import './App.scss';
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from '@app/router';
 
 function App() {
-  return <h1> hello </h1>;
+  return (
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  );
 }
 
 export default App;

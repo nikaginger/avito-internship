@@ -1,12 +1,24 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* общие переменные для светлой темы */
+  --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --color-text: #333333;
+  --color-background: #ffffff;
+
+  font-family: var(--font-family), sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-background);
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* переменные для тёмной темы */
+    --color-text: rgba(255, 255, 255, 0.87);
+    --color-background: #242424;
+  }
 }
