@@ -1,0 +1,33 @@
+.list-page {
+  padding: 30px;
+  @include media-md {
+    padding: 20px 40px;
+  }
+  @include media-sm {
+    padding: 10px 15px;
+  }
+  &__title {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    @include media-md {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    @include media-sm {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+  }
+  &__cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    @include media-md {
+      gap: 20px;
+    }
+    @include media-md {
+      gap: 10px;
+    }
+  }
+}
