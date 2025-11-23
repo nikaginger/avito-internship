@@ -1,3 +1,4 @@
+import type { InputRef } from 'antd';
 import { Button, Checkbox, Input, Select, Slider } from 'antd';
 import styles from './AdsFilter.module.scss';
 import type {
@@ -5,6 +6,7 @@ import type {
   SortType
 } from '@features/ads-filters/model/types.ts';
 import type { AdStatus } from '@/entitites/ad/model/types.ts';
+import type { RefObject } from 'react';
 
 export interface AdsFilterProps {
   filter: IAdsFilter;
@@ -14,6 +16,7 @@ export interface AdsFilterProps {
   minPrice: number;
   maxPrice: number;
   onReset: () => void;
+  searchInputRef?: RefObject<InputRef | null>;
 }
 
 const statusOptions = [
@@ -35,7 +38,8 @@ export function AdsFilter({
   onSortTypeChange,
   minPrice,
   maxPrice,
-  onReset
+  onReset,
+  searchInputRef
 }: AdsFilterProps) {
   const handleFilterChange = <K extends keyof IAdsFilter>(
     key: K,
@@ -51,6 +55,7 @@ export function AdsFilter({
     <div className={styles['ads-filter']}>
       <div className={styles['ads-filter__group']}>
         <Input
+          ref={searchInputRef}
           className={styles['ads-filter__input']}
           value={filter.search}
           onChange={(e) => handleFilterChange('search', e.target.value)}

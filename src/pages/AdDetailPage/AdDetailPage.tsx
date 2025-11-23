@@ -61,6 +61,42 @@ export function AdDetailPage() {
     fetchAd();
   }, [id]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+      if (isRejectModalOpen || isRequestChangesModalOpen) {
+        return;
+      }
+
+      switch (e.key.toLowerCase()) {
+        case 'a':
+          e.preventDefault();
+          handleApprove();
+          break;
+        case 'd':
+          e.preventDefault();
+          setIsRejectModalOpen(true);
+          break;
+        case 'arrowright':
+          e.preventDefault();
+          handleNext();
+          break;
+        case 'arrowleft':
+          e.preventDefault();
+          handlePrevious();
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [ad, isRejectModalOpen, isRequestChangesModalOpen]);
+
   const handleApprove = async () => {
     if (!ad) return;
     try {

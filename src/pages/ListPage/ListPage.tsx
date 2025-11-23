@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AdCard } from '@/entitites/ad/ui/AdCard.tsx';
+import type { InputRef } from 'antd';
 import { Pagination } from 'antd';
 import type {
   IAdsFilter,
@@ -61,10 +62,25 @@ export function ListPage() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchAds();
   }, [page, filter, sortType]);
+
+  const searchInputRef = useRef<InputRef>(null);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement) {
+        return;
+      }
+      if (e.key === '/') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleFilterChange = (nextFilter: IAdsFilter) => {
     setPage(1);
@@ -99,6 +115,7 @@ export function ListPage() {
           minPrice={pagination ? 0 : 0}
           maxPrice={pagination ? 100000 : 100000}
           onReset={handleReset}
+          searchInputRef={searchInputRef}
         />
       </div>
       <div className={styles['list-page__cards']}>
