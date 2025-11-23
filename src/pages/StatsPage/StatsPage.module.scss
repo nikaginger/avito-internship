@@ -44,19 +44,19 @@
 
   &__statistic-approved {
     :global(.ant-statistic-content-value) {
-      color: #52c41a;
+      color: $color-green;
     }
   }
 
   &__statistic-rejected {
     :global(.ant-statistic-content-value) {
-      color: #ff4d4f;
+      color: $color-red;
     }
   }
 
   &__statistic-warning {
     :global(.ant-statistic-content-value) {
-      color: #faad14;
+      color: $color-yellow;
     }
   }
 }

@@ -85,11 +85,11 @@
   }
 
   &__button-warning {
-    background-color: #faad14;
+    background-color: $color-yellow;
     color: white;
 
     &:hover {
-      background-color: #ffc53d !important;
+      background-color: $color-yellow-dark !important;
       color: white !important;
       --ant-button-default-hover-border-color: transparent;
     }
@@ -100,7 +100,7 @@
     justify-content: space-between;
     align-items: center;
     padding-top: 24px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid $color-divider;
 
     @include media-sm {
       flex-direction: column;

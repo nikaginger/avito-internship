@@ -7,6 +7,10 @@ export const Router = () => {
   return (
     <Routes>
       <Route
+        path="/"
+        element={<ListPage />}
+      />
+      <Route
         path="/list"
         element={<ListPage />}
       />

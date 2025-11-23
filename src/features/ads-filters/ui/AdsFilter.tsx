@@ -25,10 +25,14 @@ const statusOptions = [
   { label: 'Отклонено', value: 'rejected' }
 ];
 
-// TODO: Заменить на реальные категории из данных
 const categoryOptions = [
-  { label: 'Мебель', value: 'Мебель' },
-  { label: 'Электроника', value: 'Электроника' }
+  { label: 'Электроника', value: 'Электроника' },
+  { label: 'Мода', value: 'Мода' },
+  { label: 'Детское', value: 'Детское' },
+  { label: 'Работа', value: 'Работа' },
+  { label: 'Транспорт', value: 'Транспорт' },
+  { label: 'Услуги', value: 'Услуги' },
+  { label: 'Недвижимость', value: 'Недвижимость' }
 ];
 
 export function AdsFilter({

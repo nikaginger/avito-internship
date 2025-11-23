@@ -25,7 +25,6 @@
   height: 180px;
   object-fit: cover;
   border-radius: 14px 14px 0 0;
-  background: #eee;
 
   @include media-sm {
     height: 110px;
@@ -54,7 +53,7 @@
 .price {
   font-size: 19px;
   font-weight: 700;
-  color: var(--color-price, #1677ff);
+  color: var(--color-price, $color-accent);
   margin: 10px 0 0 0;
 }
 
@@ -62,7 +61,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #888;
+  color: $color-light-grey;
   margin-bottom: 5px;
   font-size: 13px;
 }
