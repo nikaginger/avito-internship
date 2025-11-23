@@ -30,4 +30,14 @@
       gap: 10px;
     }
   }
+
+  &__filter {
+    margin-bottom: 30px;
+    @include media-md {
+      margin-bottom: 20px;
+    }
+    @include media-sm {
+      margin-bottom: 10px;
+    }
+  }
 }
