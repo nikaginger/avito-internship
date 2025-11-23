@@ -52,7 +52,9 @@ export function AdDetailPage() {
         const data = await adsApi.getAdById(Number(id));
         setAd(data);
       } catch (err) {
-        setError('Ошибка загрузки объявления');
+        const message =
+          err instanceof Error ? err.message : 'Ошибка при загрузке объявления';
+        setError(`Ошибка: ${message}`);
       } finally {
         setLoading(false);
       }
@@ -104,7 +106,9 @@ export function AdDetailPage() {
       alert('Объявление одобрено');
       navigate('/list');
     } catch (err) {
-      alert('Ошибка при одобрении');
+      const message =
+        err instanceof Error ? err.message : 'Ошибка при одобрении';
+      alert(`Ошибка: ${message}`);
     }
   };
 
@@ -116,7 +120,9 @@ export function AdDetailPage() {
       setIsRejectModalOpen(false);
       navigate('/list');
     } catch (err) {
-      alert('Ошибка при отклонении');
+      const message =
+        err instanceof Error ? err.message : 'Ошибка при отклонении';
+      alert(`Ошибка: ${message}`);
     }
   };
 
@@ -128,7 +134,9 @@ export function AdDetailPage() {
       setIsRequestChangesModalOpen(false);
       navigate('/list');
     } catch (err) {
-      alert('Ошибка при запросе изменений');
+      const message =
+        err instanceof Error ? err.message : 'Ошибка при запросе изменений';
+      alert(`Ошибка: ${message}`);
     }
   };
 

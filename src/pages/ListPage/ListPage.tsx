@@ -57,7 +57,9 @@ export function ListPage() {
       setAds(response.ads);
       setPagination(response.pagination);
     } catch (err) {
-      setError('Ошибка загрузки объявлений');
+      const message =
+        err instanceof Error ? err.message : 'Ошибка при загрузке объявлений';
+      setError(`Ошибка: ${message}`);
     } finally {
       setLoading(false);
     }
