@@ -1,14 +1,16 @@
-import React from 'react';
 import { Button, Checkbox, Input, Select, Slider } from 'antd';
 import styles from './AdsFilter.module.scss';
-import type { IAdsFilter } from '@features/ads-filters/model/types.ts';
+import type {
+  IAdsFilter,
+  SortType
+} from '@features/ads-filters/model/types.ts';
 import type { AdStatus } from '@/entitites/ad/model/types.ts';
 
 export interface AdsFilterProps {
   filter: IAdsFilter;
-  setFilter: React.Dispatch<React.SetStateAction<AdsFilterProps['filter']>>;
-  sortType: string;
-  setSortType: (value: string) => void;
+  onFilterChange: (nextFilter: IAdsFilter) => void;
+  sortType: SortType;
+  onSortTypeChange: (nextSort: SortType) => void;
   minPrice: number;
   maxPrice: number;
   onReset: () => void;
@@ -28,9 +30,9 @@ const categoryOptions = [
 
 export function AdsFilter({
   filter,
-  setFilter,
+  onFilterChange,
   sortType,
-  setSortType,
+  onSortTypeChange,
   minPrice,
   maxPrice,
   onReset
@@ -39,10 +41,10 @@ export function AdsFilter({
     key: K,
     value: IAdsFilter[K]
   ) => {
-    setFilter((prev) => ({
-      ...prev,
+    onFilterChange({
+      ...filter,
       [key]: value
-    }));
+    });
   };
 
   return (
@@ -98,7 +100,7 @@ export function AdsFilter({
         <Select
           className={styles['ads-filter__sort']}
           value={sortType}
-          onChange={setSortType}
+          onChange={onSortTypeChange}
           options={[
             { value: 'createdAt-desc', label: 'Сначала новые' },
             { value: 'createdAt-asc', label: 'Сначала старые' },

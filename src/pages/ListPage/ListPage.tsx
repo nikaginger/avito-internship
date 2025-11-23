@@ -1,10 +1,16 @@
 import { useMemo, useState } from 'react';
 import { mockAds } from '@shared/mocks/ads/mock.ts';
 import { AdCard } from '@/entitites/ad/ui/AdCard.tsx';
-import type { IAdsFilter } from '@/features/ads-filters/model/types.ts';
+import { Pagination } from 'antd';
+import type {
+  IAdsFilter,
+  SortType
+} from '@/features/ads-filters/model/types.ts';
 import { AdsFilter } from '@features/ads-filters/ui/AdsFilter.tsx';
 import styles from './ListPage.module.scss';
 import type { Ad } from '@/entitites/ad/model/types.ts';
+
+const PAGE_SIZE = 10;
 
 const getMinMaxPrice = (ads: Ad[]): [number, number] => {
   const prices = ads.map((a) => a.price);
@@ -14,13 +20,14 @@ const getMinMaxPrice = (ads: Ad[]): [number, number] => {
 };
 
 export function ListPage() {
+  const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<IAdsFilter>({
     statuses: [],
     categories: [],
     priceRange: getMinMaxPrice(mockAds),
     search: ''
   });
-  const [sortType, setSortType] = useState('createdAt-desc');
+  const [sortType, setSortType] = useState<SortType>('createdAt-desc');
 
   const filteredAds = useMemo(() => {
     return mockAds
@@ -50,7 +57,21 @@ export function ListPage() {
       });
   }, [filter, sortType]);
 
+  const totalAds = filteredAds.length;
+  const pagedAds = filteredAds.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const handleFilterChange = (nextFilter: IAdsFilter) => {
+    setPage(1);
+    setFilter(nextFilter);
+  };
+
+  const handleSortChange = (nextSort: SortType) => {
+    setPage(1);
+    setSortType(nextSort);
+  };
+
   const handleReset = () => {
+    setPage(1);
     setFilter({
       statuses: [],
       categories: [],
@@ -66,21 +87,34 @@ export function ListPage() {
       <div className={styles['list-page__filter']}>
         <AdsFilter
           filter={filter}
-          setFilter={setFilter}
+          onFilterChange={handleFilterChange}
           sortType={sortType}
-          setSortType={setSortType}
+          onSortTypeChange={handleSortChange}
           minPrice={getMinMaxPrice(mockAds)[0]}
           maxPrice={getMinMaxPrice(mockAds)[1]}
           onReset={handleReset}
         />
       </div>
       <div className={styles['list-page__cards']}>
-        {filteredAds.map((ad) => (
+        {pagedAds.map((ad) => (
           <AdCard
             key={ad.id}
             ad={ad}
           />
         ))}
+      </div>
+      <div className={styles['list-page__pagination']}>
+        <Pagination
+          className={styles['list-page__pages']}
+          current={page}
+          pageSize={PAGE_SIZE}
+          total={totalAds}
+          showSizeChanger={false}
+          onChange={setPage}
+        />
+        <div className={styles['list-page__note']}>
+          Показано {pagedAds.length} из {totalAds} объявлений
+        </div>
       </div>
     </div>
   );

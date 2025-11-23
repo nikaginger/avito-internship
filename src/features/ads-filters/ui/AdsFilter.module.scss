@@ -33,13 +33,11 @@
     justify-content: flex-start;
   }
 
-  &__input,
   &__statuses,
   &__select,
   &__slider,
   &__reset {
     min-width: 150px;
-    margin-bottom: 0 !important;
   }
 
   &__input {
