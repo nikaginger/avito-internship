@@ -1,5 +1,6 @@
 import React from 'react';
 import { Badge, Card, Tag } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import styles from './AdCard.module.scss';
 import type { Ad } from '@/entitites/ad/model/types.ts';
 
@@ -8,6 +9,11 @@ interface AdCardProps {
 }
 
 export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/item/${ad.id}`);
+  };
   return (
     <Card
       hoverable
@@ -19,7 +25,15 @@ export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
           className={styles.image}
         />
       }
-      actions={[<span key="open-action">Открыть</span>]}
+      onClick={handleClick}
+      actions={[
+        <span
+          key="open-action"
+          onClick={handleClick}
+        >
+          Открыть
+        </span>
+      ]}
     >
       <div className={styles.header}>
         <span className={styles.title}>{ad.title}</span>
