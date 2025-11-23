@@ -15,7 +15,7 @@ export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
       cover={
         <img
           alt={ad.title}
-          src={ad.imageUrl || 'https://loremflickr.com/1280/720'}
+          src={ad.images?.[0] || 'https://loremflickr.com/1280/720'}
           className={styles.image}
         />
       }

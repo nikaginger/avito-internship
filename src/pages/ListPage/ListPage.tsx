@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import { mockAds } from '@shared/mocks/ads/mock.ts';
+import { useEffect, useState } from 'react';
 import { AdCard } from '@/entitites/ad/ui/AdCard.tsx';
 import { Pagination } from 'antd';
 import type {
@@ -8,57 +7,64 @@ import type {
 } from '@/features/ads-filters/model/types.ts';
 import { AdsFilter } from '@features/ads-filters/ui/AdsFilter.tsx';
 import styles from './ListPage.module.scss';
-import type { Ad } from '@/entitites/ad/model/types.ts';
+import { adsApi } from '@/entitites/ad/api/adsApi';
+import type { GetAdsParams, GetAdsResponse } from '@/entitites/ad/api/types.ts';
 
 const PAGE_SIZE = 10;
-
-const getMinMaxPrice = (ads: Ad[]): [number, number] => {
-  const prices = ads.map((a) => a.price);
-  const min = Math.min(...prices);
-  const max = Math.max(...prices);
-  return [min, max];
-};
 
 export function ListPage() {
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<IAdsFilter>({
     statuses: [],
     categories: [],
-    priceRange: getMinMaxPrice(mockAds),
+    priceRange: [0, 100000],
     search: ''
   });
   const [sortType, setSortType] = useState<SortType>('createdAt-desc');
 
-  const filteredAds = useMemo(() => {
-    return mockAds
-      .filter(
-        (ad) =>
-          (filter.statuses.length === 0 ||
-            filter.statuses.includes(ad.status)) &&
-          (filter.categories.length === 0 ||
-            filter.categories.includes(ad.category)) &&
-          ad.price >= filter.priceRange[0] &&
-          ad.price <= filter.priceRange[1] &&
-          ad.title.toLowerCase().includes(filter.search.toLowerCase())
-      )
-      .sort((a, b) => {
-        if (sortType === 'createdAt-desc')
-          return b.createdAt.localeCompare(a.createdAt);
-        if (sortType === 'createdAt-asc')
-          return a.createdAt.localeCompare(b.createdAt);
-        if (sortType === 'price-desc') return b.price - a.price;
-        if (sortType === 'price-asc') return a.price - b.price;
-        if (sortType === 'priority')
-          return (
-            (b.priority === 'urgent' ? 1 : 0) -
-            (a.priority === 'urgent' ? 1 : 0)
-          );
-        return 0;
-      });
-  }, [filter, sortType]);
+  const [ads, setAds] = useState<GetAdsResponse['ads']>([]);
+  const [pagination, setPagination] = useState<
+    GetAdsResponse['pagination'] | null
+  >(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const totalAds = filteredAds.length;
-  const pagedAds = filteredAds.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const fetchAds = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [sortBy, sortOrder] = sortType.split('-') as [
+        GetAdsParams['sortBy'],
+        GetAdsParams['sortOrder']
+      ];
+      const params: GetAdsParams = {
+        page,
+        limit: PAGE_SIZE,
+        status: filter.statuses.length > 0 ? filter.statuses : undefined,
+        categoryId:
+          filter.categories.length === 1
+            ? Number(filter.categories[0])
+            : undefined,
+        minPrice: filter.priceRange[0],
+        maxPrice: filter.priceRange[1],
+        search: filter.search || undefined,
+        sortBy,
+        sortOrder
+      };
+
+      const response = await adsApi.getAds(params);
+      setAds(response.ads);
+      setPagination(response.pagination);
+    } catch (err) {
+      setError('Ошибка загрузки объявлений');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAds();
+  }, [page, filter, sortType]);
 
   const handleFilterChange = (nextFilter: IAdsFilter) => {
     setPage(1);
@@ -75,7 +81,7 @@ export function ListPage() {
     setFilter({
       statuses: [],
       categories: [],
-      priceRange: getMinMaxPrice(mockAds),
+      priceRange: [0, 100000],
       search: ''
     });
     setSortType('createdAt-desc');
@@ -90,30 +96,37 @@ export function ListPage() {
           onFilterChange={handleFilterChange}
           sortType={sortType}
           onSortTypeChange={handleSortChange}
-          minPrice={getMinMaxPrice(mockAds)[0]}
-          maxPrice={getMinMaxPrice(mockAds)[1]}
+          minPrice={pagination ? 0 : 0}
+          maxPrice={pagination ? 100000 : 100000}
           onReset={handleReset}
         />
       </div>
       <div className={styles['list-page__cards']}>
-        {pagedAds.map((ad) => (
-          <AdCard
-            key={ad.id}
-            ad={ad}
-          />
-        ))}
+        {loading && <div>Загрузка...</div>}
+        {error && <div>{error}</div>}
+        {!loading && !error && ads.length === 0 && (
+          <div>Объявления не найдены</div>
+        )}
+        {!loading &&
+          !error &&
+          ads.map((ad) => (
+            <AdCard
+              key={ad.id}
+              ad={ad}
+            />
+          ))}
       </div>
       <div className={styles['list-page__pagination']}>
         <Pagination
-          className={styles['list-page__pages']}
           current={page}
           pageSize={PAGE_SIZE}
-          total={totalAds}
+          total={pagination ? pagination.totalItems : 0}
           showSizeChanger={false}
           onChange={setPage}
         />
         <div className={styles['list-page__note']}>
-          Показано {pagedAds.length} из {totalAds} объявлений
+          Показано {ads.length} из {pagination ? pagination.totalItems : 0}{' '}
+          объявлений
         </div>
       </div>
     </div>
